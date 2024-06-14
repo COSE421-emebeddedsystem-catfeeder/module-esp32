@@ -59,6 +59,12 @@
 
 OV2640 cam;
 
+IPAddress local_IP(172, 20, 10, 10);
+IPAddress gateway(172, 20, 10, 1);
+IPAddress subnet(255, 255, 255, 240);
+IPAddress primaryDNS(8, 8, 8, 8);    //optional
+IPAddress secondaryDNS(8, 8, 4, 4);  //optional
+
 WebServer server(80);
 
 // ===== rtos task handles =========================
@@ -436,7 +442,12 @@ void setup()
   //  Configure and connect to WiFi
   IPAddress ip;
 
-  WiFi.mode(WIFI_STA);
+  // WiFi.mode(WIFI_STA);
+
+  if (!WiFi.config(local_IP, gateway, subnet, primaryDNS, secondaryDNS)) {
+    Serial.println("STA Failed to configure");
+  }
+
   WiFi.begin("jhbaik13mini", "minole2413");//WIFI
   Serial.print("Connecting to WiFi");
   while (WiFi.status() != WL_CONNECTED)
